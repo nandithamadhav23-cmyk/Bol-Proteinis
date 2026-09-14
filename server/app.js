@@ -8,17 +8,22 @@ dns.setServers(['8.8.4.4', '8.8.8.8']);
 dotenv.config();
 
 const connectdb = require('./dbConfig/connectDb');
-const menuRoutes = require('./Controller/menuRoutes');
-const orderRoutes = require('./Controller/orderRoutes');
+
 
 const app = express();
 
+app.use('/api/webhooks', require('./routes/webhookRoutes'));
 app.use(cors());
+
 app.use(express.json());
 
-app.use('/api/menu', menuRoutes);
-app.use('/api/orders', orderRoutes);
 
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/subscriptions', require('./routes/subscriptionRoutes'));
+app.use('/api/payment', require('./routes/paymentRoutes'));
+app.use('/api/menu', require('./routes/menuRoutes'));
+app.use('/api/orders', require('./routes/orderRoutes'));
 app.get('/', (req, res) => {
   res.send('Bol Proteinis API is running');
 });

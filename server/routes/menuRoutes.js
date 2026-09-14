@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const MenuItem = require('../model/MenuItem');
+const { verifyToken, requireAdmin } = require('../middleware/auth');
 
 // GET /api/menu - all active items, grouped naturally by day when sorted
 router.get('/', async (req, res) => {
@@ -23,8 +24,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/menu - create item (admin only — add auth middleware later)
-router.post('/', async (req, res) => {
+// POST /api/menu - create item (admin only)
+router.post('/', verifyToken, requireAdmin, async (req, res) => {
   try {
     const item = new MenuItem(req.body);
     await item.save();
@@ -35,10 +36,10 @@ router.post('/', async (req, res) => {
 });
 
 // PUT /api/menu/:id - update item (admin only)
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, requireAdmin, async (req, res) => {
   try {
     const item = await MenuItem.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true,
     });
     if (!item) return res.status(404).json({ message: 'Item not found' });
@@ -49,7 +50,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE /api/menu/:id (admin only)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, requireAdmin, async (req, res) => {
   try {
     const item = await MenuItem.findByIdAndDelete(req.params.id);
     if (!item) return res.status(404).json({ message: 'Item not found' });

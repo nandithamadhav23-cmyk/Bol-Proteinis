@@ -145,10 +145,13 @@ function buildAdminOrderEmail(order) {
 
 function buildCustomerOrderEmail(order) {
   const bodyHtml = itemsTableRows(order.items) + totalRow(order.totalAmount);
+  const cookTimeLine = order.cookTimeMinutes
+    ? `Estimated cook time: <strong>${order.cookTimeMinutes} minutes</strong>. `
+    : '';
 
   return baseTemplate({
     heading: 'Order confirmed',
-    subheading: `Hi ${order.name}, thanks for your order! Here's what's coming your way, delivered to <strong>${order.flatNumber}, ${order.community}</strong>.`,
+    subheading: `Hi ${order.name}, your order is confirmed! ${cookTimeLine}Here's what's coming your way, delivered to <strong>${order.flatNumber}, ${order.community}</strong>.`,
     bodyHtml,
   });
 }

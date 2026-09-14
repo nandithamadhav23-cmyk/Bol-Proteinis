@@ -162,17 +162,22 @@ export default function WeeklyMenu({ onAdd }) {
   const soup = menu.find((m) => m.day === day && m.type === "Soup");
 
   return (
-    <div className="w-full min-h-full relative" style={{ backgroundColor: cream }}>
+    <div id="menu-section" className="w-full min-h-full relative" style={{ backgroundColor: cream, overflowX: "hidden" }}>
       <style>{styles}</style>
       <div className="max-w-3xl mx-auto px-6 py-14 sd-menu-in">
         <div className="mb-10">
-          <img src={logo} alt="Bol Proteinis" className="h-24 sd-menu-in" style={{ width: "auto" }} />
+          <img
+            src={logo}
+            alt="Bol Proteinis"
+            className="sd-menu-in"
+            style={{ width: "100%", maxWidth: 320, height: "auto", display: "block" }}
+          />
           <p className="text-sm mt-3 max-w-md leading-relaxed" style={{ color: moss }}>
             Protein bowls, salads, smoothies and sandwiches, hand delivered to your door. This week's menu.
           </p>
         </div>
 
-        <div className="flex gap-6 mb-2" style={{ borderBottom: `1px solid ${line}` }}>
+        <div className="flex gap-6 mb-2 overflow-x-auto" style={{ borderBottom: `1px solid ${line}`, WebkitOverflowScrolling: "touch" }}>
           {DAYS.map((d, i) => (
             <button
               key={d}

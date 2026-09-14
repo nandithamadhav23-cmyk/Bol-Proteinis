@@ -14,7 +14,11 @@ const orderItemSchema = new mongoose.Schema(
 
 const orderSchema = new mongoose.Schema(
   {
-    // Customer details — same fields as the Google Form
+    // Linked to a registered account when the customer is logged in; null for guest orders
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
+    // Customer details — same fields as the Google Form (kept even for logged-in
+    // users so past orders remain readable if their profile changes later)
     email: { type: String, required: true, trim: true, lowercase: true },
     name: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },
@@ -28,7 +32,11 @@ const orderSchema = new mongoose.Schema(
 
     totalAmount: { type: Number, required: true },
     paymentStatus: { type: String, enum: ['pending', 'paid'], default: 'pending' },
-    paymentMethod: { type: String, default: 'UPI' },
+    paymentMethod: { type: String, enum: ['COD', 'Razorpay'], default: 'COD' },
+    razorpayOrderId: { type: String },
+    razorpayPaymentId: { type: String },
+    cookTimeMinutes: { type: Number },
+    confirmedAt: { type: Date },
     status: {
       type: String,
       enum: ['pending', 'confirmed', 'preparing', 'delivered', 'cancelled'],

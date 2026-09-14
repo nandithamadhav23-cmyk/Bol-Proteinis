@@ -18,17 +18,17 @@ function plainTextFallback(order) {
   return `Order for ${order.name}\n\n${itemsList}\n\nTotal: ₹${order.totalAmount}`;
 }
 
-async function sendOrderEmails(order) {
-  // 1. Notify the restaurant/admin
+async function sendAdminNotification(order) {
   await transporter.sendMail({
     from: `"Bol Proteinis Orders" <${process.env.EMAIL_USER}>`,
     to: process.env.ADMIN_EMAIL,
-    subject: `New order from ${order.name} — ₹${order.totalAmount}`,
+    subject: `New order from ${order.name} — ₹${order.totalAmount} (needs confirmation)`,
     text: plainTextFallback(order),
     html: buildAdminOrderEmail(order),
   });
+}
 
-  // 2. Confirmation to the customer
+async function sendCustomerConfirmation(order) {
   await transporter.sendMail({
     from: `"Bol Proteinis" <${process.env.EMAIL_USER}>`,
     to: order.email,
@@ -38,4 +38,4 @@ async function sendOrderEmails(order) {
   });
 }
 
-module.exports = { sendOrderEmails };
+module.exports = { sendAdminNotification, sendCustomerConfirmation };

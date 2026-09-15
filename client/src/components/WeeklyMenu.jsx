@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import logo from "../assets/logo.jpg";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const DAY_SHORT = { Monday: "Mon", Tuesday: "Tue", Wednesday: "Wed", Thursday: "Thu", Friday: "Fri" };
 
 const ink = "#223A2E";
 const cream = "#F6F2E7";
@@ -177,15 +178,16 @@ export default function WeeklyMenu({ onAdd }) {
           </p>
         </div>
 
-        <div className="flex gap-6 mb-2 overflow-x-auto" style={{ borderBottom: `1px solid ${line}`, WebkitOverflowScrolling: "touch" }}>
+        <div className="flex justify-between sm:justify-start gap-0 sm:gap-6 mb-2" style={{ borderBottom: `1px solid ${line}` }}>
           {DAYS.map((d, i) => (
             <button
               key={d}
               onClick={() => setActive(i)}
-              className={`sd-day-tab pb-3 text-sm ${active === i ? "active" : ""}`}
+              className={`sd-day-tab pb-3 text-xs sm:text-sm flex-1 sm:flex-initial ${active === i ? "active" : ""}`}
               style={{ color: active === i ? ink : moss, fontWeight: active === i ? 600 : 400 }}
             >
-              {d}
+              <span className="hidden sm:inline">{d}</span>
+              <span className="sm:hidden">{DAY_SHORT[d]}</span>
               <span className="underline" />
             </button>
           ))}
